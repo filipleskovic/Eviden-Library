@@ -28,6 +28,11 @@ namespace Library.Services
         {
             return await _repository.PutBookAuthorAsync(Id,bookAuthor);
         }
+        public async Task<int> DeleteBookAuthorAsync(int Id)
+        {
+            return await _repository.DeleteBookAuthorAsync(Id);
+        }
+
 
 
     }

@@ -49,6 +49,21 @@ namespace Library.Repository
             await _dbContext.SaveChangesAsync();
             return bookAuthor;
         }
+        public async Task<int> DeleteBookAuthorAsync(int Id)
+        {
+            if (_dbContext == null)
+            {
+                return 0;
+            }
+            BookAuthor bookAuthor =await _dbContext.BookAuthors.FindAsync(Id);
+            if(bookAuthor == null)
+            {
+                return -1;
+            }
+             _dbContext.BookAuthors.Remove(bookAuthor);
+            await _dbContext.SaveChangesAsync();
+            return 1;
+        }
 
     }
 }

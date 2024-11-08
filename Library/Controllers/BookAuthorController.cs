@@ -58,13 +58,13 @@ namespace Library.Controllers
             }
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult>PutBookAuthor([FromBody]  BookAuthor bookAuthor, [FromRoute]int Id)
+        public async Task<IActionResult> PutBookAuthor([FromBody] BookAuthor bookAuthor, [FromRoute] int Id)
         {
             if (Id != bookAuthor.Id)
                 return BadRequest();
             try
             {
-                BookAuthor edited = await _service.PutBookAuthorAsync(Id,bookAuthor);
+                BookAuthor edited = await _service.PutBookAuthorAsync(Id, bookAuthor);
                 return Ok(edited);
 
             }
@@ -73,5 +73,21 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-    }
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteBookAuthor([FromRoute] int Id)
+        {
+            try
+            {
+                int commits =await _service.DeleteBookAuthorAsync(Id);
+                return Ok(commits);
+
+          
+            }
+            catch(DbUpdateException ex)
+            {
+                return BadRequest(ex.InnerException?.Message);
+            }
+        }
+    };
 }
+

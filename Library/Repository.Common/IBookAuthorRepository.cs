@@ -8,6 +8,8 @@ namespace Library.IBookAuthorRepoistory.cs
         Task<BookAuthor> GetBookAuthorAsync(int id);
         Task<BookAuthor> PutBookAuthorAsync(int Id, BookAuthor bookAuthor);
         Task<int> PostBookAuthorAsync(BookAuthor bookAuthor);
-        
+        Task<int> DeleteBookAuthorAsync(int Id);
+
+
     }
 }
