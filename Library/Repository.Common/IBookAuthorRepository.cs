@@ -5,7 +5,9 @@ namespace Library.IBookAuthorRepoistory.cs
     public interface IBookAuthorRepository
     {
         Task<IList<BookAuthor>> GetBookAuthorsAsync();
-        Task<int> PostBookAuthorAsync(BookAuthor bookAuthorž);
+        Task<BookAuthor> GetBookAuthorAsync(int id);
+        Task<BookAuthor> PutBookAuthorAsync(int Id, BookAuthor bookAuthor);
+        Task<int> PostBookAuthorAsync(BookAuthor bookAuthor);
         
     }
 }

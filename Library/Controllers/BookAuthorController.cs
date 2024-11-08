@@ -1,11 +1,12 @@
-﻿using Library.Models;
+﻿using Library.DTO.BookAuthor;
+using Library.Models;
 using Library.Services.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace Library.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("book-authors")]
     public class BookAuthorController : ControllerBase
     {
         private IBookAuthorService _service;
@@ -13,7 +14,7 @@ namespace Library.Controllers
         {
             _service = service;
         }
-        [HttpGet("GetBookAuthors")]
+        [HttpGet()]
         public async Task<IActionResult> GetBookAuthors()
         {
             try
@@ -26,16 +27,49 @@ namespace Library.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("PostBookAuthor")]
-        public async Task<IActionResult> PostBookAuthor(BookAuthor bookAuthor)
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookAuthor([FromRoute] int id)
         {
             try
             {
-                 int commits = await _service.PostBookAuthorAsync(bookAuthor);
-                return Ok(commits);
-                   
+                BookAuthor bookAuthor = await _service.GetBookAuthorAsync(id);
+                return Ok(bookAuthor);
             }
-            catch(DbUpdateException ex) {
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost()]
+        public async Task<IActionResult> PostBookAuthor(BookAuthorPostModel bookAuthorPostModel)
+        {
+            BookAuthor bookAuthor = bookAuthorPostModel.ToBookAuthor();
+            try
+            {
+                int commits = await _service.PostBookAuthorAsync(bookAuthor);
+                return Ok(commits);
+
+            }
+            catch (DbUpdateException ex) {
+                return BadRequest(ex.InnerException?.Message);
+            }
+        }
+        [HttpPut("{Id}")]
+        public async Task<IActionResult>PutBookAuthor([FromBody]  BookAuthor bookAuthor, [FromRoute]int Id)
+        {
+            if (Id != bookAuthor.Id)
+                return BadRequest();
+            try
+            {
+                BookAuthor edited = await _service.PutBookAuthorAsync(Id,bookAuthor);
+                return Ok(edited);
+
+            }
+            catch (DbUpdateException ex)
+            {
                 return BadRequest(ex.InnerException?.Message);
             }
         }

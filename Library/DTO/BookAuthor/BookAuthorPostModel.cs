@@ -1,6 +1,14 @@
-﻿namespace Library.DTO.BookAuthor
+﻿
+namespace Library.DTO.BookAuthor
 {
-    public class Class
+    public class BookAuthorPostModel
     {
+        public string AuthorName { get; set; }
+        public int YearOfBirth { get; set; }
+
+        public Models.BookAuthor ToBookAuthor()
+        {
+            return new Models.BookAuthor {  AuthorName = AuthorName, YearOfBirth = YearOfBirth };
+        }
     }
 }

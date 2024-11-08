@@ -1,6 +1,7 @@
 ﻿using Library.IBookAuthorRepoistory.cs;
 using Library.Models;
 using Library.Services.Common;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Library.Services
 {
@@ -15,9 +16,17 @@ namespace Library.Services
         {
             return await _repository.GetBookAuthorsAsync();
         }
+        public async Task<BookAuthor>GetBookAuthorAsync(int Id)
+        {
+            return await _repository.GetBookAuthorAsync(Id);
+        }
         public async Task<int> PostBookAuthorAsync(BookAuthor bookAuthor)
         {
             return await _repository.PostBookAuthorAsync(bookAuthor);
+        }
+        public async Task<BookAuthor> PutBookAuthorAsync(int Id,BookAuthor bookAuthor)
+        {
+            return await _repository.PutBookAuthorAsync(Id,bookAuthor);
         }
 
 
