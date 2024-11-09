@@ -38,13 +38,22 @@ namespace Library.Repository
             _dbContext.BookAuthors.Add(bookAuthor);
             return await _dbContext.SaveChangesAsync();
         }
-        public async Task<BookAuthor> UpdateBookAuthorAsync(int id, BookAuthor bookAuthor)
+        public async Task<BookAuthor> UpdateBookAuthorAsync(int id, BookAuthor editedBookAuthor)
         {
             if (_dbContext == null)
             {
                 return null;
             }
-            _dbContext.Entry(bookAuthor).State = EntityState.Modified;
+            BookAuthor bookAuthor = await GetBookAuthorAsync(id);
+            if (editedBookAuthor.YearOfBirth != 0)
+            {
+                bookAuthor.YearOfBirth = editedBookAuthor.YearOfBirth;
+
+            }
+            if (!string.IsNullOrEmpty(editedBookAuthor.AuthorName))
+            {
+                bookAuthor.AuthorName = editedBookAuthor.AuthorName;
+            }
             await _dbContext.SaveChangesAsync();
             return bookAuthor;
         }

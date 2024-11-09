@@ -36,14 +36,19 @@ namespace Library.Repository
             _dbContext.Genres.Add(genre);
             return await _dbContext.SaveChangesAsync();
         }
-        public async Task<Genre> UpdateGenreAsync(int id, Genre genre)
+        public async Task<Genre> UpdateGenreAsync(int id, Genre editedGenre)
         {
             if (_dbContext == null)
             {
                 return null;
             }
 
-            _dbContext.Entry(genre).State = EntityState.Modified;
+            Genre genre = await GetGenreAsync(id);
+            
+            if (!string.IsNullOrEmpty(editedGenre.GenreName))
+            {
+                genre.GenreName = editedGenre.GenreName;
+            }
             await _dbContext.SaveChangesAsync();
             return genre;
         }
