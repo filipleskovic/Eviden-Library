@@ -20,13 +20,13 @@ namespace Library.Services
         {
             return await _repository.GetBookAuthorAsync(Id);
         }
-        public async Task<int> PostBookAuthorAsync(BookAuthor bookAuthor)
+        public async Task<int> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
-            return await _repository.PostBookAuthorAsync(bookAuthor);
+            return await _repository.CreateBookAuthorAsync(bookAuthor);
         }
-        public async Task<BookAuthor> PutBookAuthorAsync(int Id,BookAuthor bookAuthor)
+        public async Task<BookAuthor> UpdateBookAuthorAsync(int Id,BookAuthor bookAuthor)
         {
-            return await _repository.PutBookAuthorAsync(Id,bookAuthor);
+            return await _repository.UpdateBookAuthorAsync(Id,bookAuthor);
         }
         public async Task<int> DeleteBookAuthorAsync(int Id)
         {

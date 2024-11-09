@@ -29,7 +29,7 @@ namespace Library.Repository
             }
             return await _dbContext.BookAuthors.FindAsync(Id);
         }
-        public async Task<int> PostBookAuthorAsync(BookAuthor bookAuthor)
+        public async Task<int> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
             if(_dbContext == null)
             {
@@ -38,13 +38,12 @@ namespace Library.Repository
             _dbContext.BookAuthors.Add(bookAuthor);
             return await _dbContext.SaveChangesAsync();
         }
-        public async Task<BookAuthor> PutBookAuthorAsync(int id, BookAuthor bookAuthor)
+        public async Task<BookAuthor> UpdateBookAuthorAsync(int id, BookAuthor bookAuthor)
         {
             if (_dbContext == null)
             {
                 return null;
             }
-
             _dbContext.Entry(bookAuthor).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return bookAuthor;

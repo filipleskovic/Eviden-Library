@@ -15,41 +15,41 @@ namespace Library.Controllers
             _service = service;
         }
         [HttpGet()]
-        public async Task<IActionResult> GetBookAuthors()
+        public async Task<IActionResult> GetBookAuthorsAsync()
         {
             try
             {
                 IList<BookAuthor> bookAuthors = await _service.GetBookAuthorsAsync();
                 return Ok(bookAuthors);
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.InnerException?.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookAuthor([FromRoute] int id)
+        public async Task<IActionResult> GetBookAuthorAsync([FromRoute] int id)
         {
             try
             {
                 BookAuthor bookAuthor = await _service.GetBookAuthorAsync(id);
                 return Ok(bookAuthor);
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.InnerException?.Message);
             }
         }
 
 
         [HttpPost()]
-        public async Task<IActionResult> PostBookAuthor(BookAuthorPostModel bookAuthorPostModel)
+        public async Task<IActionResult> CreateBookAuthorAsync(BookAuthorPostModel bookAuthorPostModel)
         {
             BookAuthor bookAuthor = bookAuthorPostModel.ToBookAuthor();
             try
             {
-                int commits = await _service.PostBookAuthorAsync(bookAuthor);
+                int commits = await _service.CreateBookAuthorAsync(bookAuthor);
                 return Ok(commits);
 
             }
@@ -58,13 +58,13 @@ namespace Library.Controllers
             }
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutBookAuthor([FromBody] BookAuthor bookAuthor, [FromRoute] int Id)
+        public async Task<IActionResult> UpdateBookAuthorAsync([FromBody] BookAuthor bookAuthor, [FromRoute] int Id)
         {
             if (Id != bookAuthor.Id)
                 return BadRequest();
             try
             {
-                BookAuthor edited = await _service.PutBookAuthorAsync(Id, bookAuthor);
+                BookAuthor edited = await _service.UpdateBookAuthorAsync(Id, bookAuthor);
                 return Ok(edited);
 
             }
@@ -74,7 +74,7 @@ namespace Library.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteBookAuthor([FromRoute] int Id)
+        public async Task<IActionResult> DeleteBookAuthorAsync([FromRoute] int Id)
         {
             try
             {

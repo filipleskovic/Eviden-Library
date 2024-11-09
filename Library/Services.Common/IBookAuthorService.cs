@@ -6,9 +6,9 @@ namespace Library.Services.Common
     {
         Task<IList<BookAuthor>> GetBookAuthorsAsync();
         Task<BookAuthor> GetBookAuthorAsync(int Id);
-        Task<BookAuthor> PutBookAuthorAsync(int Id, BookAuthor bookAuthor);
-
-        Task<int> PostBookAuthorAsync(BookAuthor bookAuthor);
+        Task<BookAuthor> UpdateBookAuthorAsync(int Id, BookAuthor bookAuthor);
+        
+        Task<int> CreateBookAuthorAsync(BookAuthor bookAuthor);
         Task<int> DeleteBookAuthorAsync(int Id);
     }
 }

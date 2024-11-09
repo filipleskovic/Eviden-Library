@@ -2,7 +2,7 @@
 {
     public class Book
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string BookName { get;set; }
         public DateTime EntryDate { get; set; }
         public int BookAuthorId { get; set; }

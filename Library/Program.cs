@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Library.IBookAuthorRepoistory.cs;
 using Library.Models;
 using Library.Repository;
+using Library.Repository.Common;
 using Library.Services;
 using Library.Services.Common;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,11 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterType<BookAuthorService>().As<IBookAuthorService>().InstancePerLifetimeScope();
+    containerBuilder.RegisterType<GenreService>().As<IGenreService>().InstancePerLifetimeScope();
+
     containerBuilder.RegisterType<BookAuthorRepository>().As<IBookAuthorRepository>().InstancePerLifetimeScope();
+    containerBuilder.RegisterType<GenreRepository>().As<IGenreRepository>().InstancePerLifetimeScope();
+
 });
 
 var app = builder.Build();
