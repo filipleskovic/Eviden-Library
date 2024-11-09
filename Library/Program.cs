@@ -27,9 +27,13 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterType<BookAuthorService>().As<IBookAuthorService>().InstancePerLifetimeScope();
     containerBuilder.RegisterType<GenreService>().As<IGenreService>().InstancePerLifetimeScope();
+    containerBuilder.RegisterType<BookService>().As<IBookService>().InstancePerLifetimeScope();
+
 
     containerBuilder.RegisterType<BookAuthorRepository>().As<IBookAuthorRepository>().InstancePerLifetimeScope();
     containerBuilder.RegisterType<GenreRepository>().As<IGenreRepository>().InstancePerLifetimeScope();
+    containerBuilder.RegisterType<BookRepository>().As<IBookRepository>().InstancePerLifetimeScope();
+
 
 });
 

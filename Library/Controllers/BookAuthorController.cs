@@ -50,7 +50,7 @@ namespace Library.Controllers
             try
             {
                 int commits = await _service.CreateBookAuthorAsync(bookAuthor);
-                return Ok(commits);
+                return Ok("BookAuthor created successfully");
 
             }
             catch (DbUpdateException ex) {
@@ -61,7 +61,7 @@ namespace Library.Controllers
         public async Task<IActionResult> UpdateBookAuthorAsync([FromBody] BookAuthor bookAuthor, [FromRoute] int Id)
         {
             if (Id != bookAuthor.Id)
-                return BadRequest();
+                return BadRequest("Id can't be changed"); 
             try
             {
                 BookAuthor edited = await _service.UpdateBookAuthorAsync(Id, bookAuthor);
@@ -79,7 +79,7 @@ namespace Library.Controllers
             try
             {
                 int commits =await _service.DeleteBookAuthorAsync(Id);
-                return Ok(commits);
+                return Ok("BookAuthor deleted successfully");
 
           
             }

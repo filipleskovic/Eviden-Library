@@ -1,4 +1,5 @@
-﻿using Library.DTO.Genre;
+﻿using Library.DTO.Book;
+using Library.DTO.BookAuthor;
 using Library.Models;
 using Library.Services.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -7,21 +8,21 @@ using Microsoft.EntityFrameworkCore;
 namespace Library.Controllers
 {
     [ApiController]
-    [Route("genres")]
-    public class GenreController: ControllerBase
+    [Route("books")]
+    public class BookController : ControllerBase
     {
-        private IGenreService _service;
-        public GenreController(IGenreService service)
+        private IBookService _service;
+        public BookController(IBookService service)
         {
             _service = service;
         }
-        [HttpGet()]   
-        public async Task<IActionResult> GetGenresAsync()
+        [HttpGet()]
+        public async Task<IActionResult> GetBooksAsync()
         {
             try
             {
-                IList<Genre> genres = await _service.GetGenresAsync();
-                return Ok(genres);
+                IList<Book> books = await _service.GetBooksAsync();
+                return Ok(books);
             }
             catch (DbUpdateException ex)
             {
@@ -30,12 +31,12 @@ namespace Library.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGenreAsync([FromRoute] int id)
+        public async Task<IActionResult> GetBookAsync([FromRoute] int id)
         {
             try
             {
-                Genre genre = await _service.GetGenreAsync(id);
-                return Ok(genre);
+                Book book = await _service.GetBookAsync(id);
+                return Ok(book);
             }
             catch (DbUpdateException ex)
             {
@@ -45,12 +46,12 @@ namespace Library.Controllers
 
 
         [HttpPost()]
-        public async Task<IActionResult> CreateGenreAsync(GenrePostModel genrePostModel)
+        public async Task<IActionResult> CreateBookAsync([FromBody] BookPostModel bookPostModel)
         {
-            Genre genre = genrePostModel.ToGenre();
+            Book book = bookPostModel.ToBook();
             try
             {
-                int commits = await _service.CreateGenreAsync(genre);
+                int commits = await _service.CreateBookAsync(book);
                 return Ok("Book created successfully");
 
             }
@@ -59,39 +60,34 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateGenreAsync([FromBody] Genre genre, [FromRoute] int Id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditBookAsync([FromBody] BookPutModel bookPutModel, [FromRoute] int id)
         {
-            if (Id != genre.Id)
+            if (bookPutModel.Id != id)
                 return BadRequest("Id can't be changed");
+            Book book = bookPutModel.ToBook();
             try
             {
-                Genre edited = await _service.UpdateGenreAsync(Id, genre);
-                return Ok(edited);
-
+                book = await _service.UpdateBookAsync(id, book);
+                return Ok(book);
             }
             catch (DbUpdateException ex)
             {
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteGenreAuthorAsync([FromRoute] int Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBookAsync([FromRoute] int id)
         {
             try
             {
-                int commits = await _service.DeleteGenreAsync(Id);
+                 await _service.DeleteBookAsync(id);
                 return Ok("Book deleted successfully");
-
-
             }
             catch (DbUpdateException ex)
             {
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-
-
-
     }
 }
