@@ -51,8 +51,8 @@ namespace Library.Controllers
             Book book = bookPostModel.ToBook();
             try
             {
-                int commits = await _service.CreateBookAsync(book);
-                return Ok("Book created successfully");
+                Book addedBook= await _service.CreateBookAsync(book);
+                return Ok(addedBook);
 
             }
             catch (DbUpdateException ex)
@@ -63,11 +63,11 @@ namespace Library.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditBookAsync([FromBody] BookPutModel bookPutModel, [FromRoute] int id)
         {
-            if (bookPutModel.Id != id)
-                return BadRequest("Id can't be changed");
-            Book book = bookPutModel.ToBook();
+            
+            
             try
             {
+                Book book = bookPutModel.ToBook();
                 book = await _service.UpdateBookAsync(id, book);
                 return Ok(book);
             }

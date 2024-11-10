@@ -27,14 +27,16 @@ namespace Library.Repository
             }
             return await _dbContext.Genres.FindAsync(Id);
         }
-        public async Task<int> CreateGenreAsync(Genre genre)
+        public async Task<Genre> CreateGenreAsync(Genre genre)
         {
             if (_dbContext == null)
             {
-                return 0;
+                return null;
             }
             _dbContext.Genres.Add(genre);
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            genre = _dbContext.Genres.OrderByDescending(genre=>genre.Id).FirstOrDefault();
+            return genre;
         }
         public async Task<Genre> UpdateGenreAsync(int id, Genre editedGenre)
         {

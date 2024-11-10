@@ -29,14 +29,16 @@ namespace Library.Repository
             }
             return await _dbContext.BookAuthors.FindAsync(Id);
         }
-        public async Task<int> CreateBookAuthorAsync(BookAuthor bookAuthor)
+        public async Task<BookAuthor> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
             if(_dbContext == null)
             {
-                return 0;
+                return null;
             }
             _dbContext.BookAuthors.Add(bookAuthor);
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            bookAuthor = _dbContext.BookAuthors.OrderByDescending(bAuthor => bAuthor.Id).FirstOrDefault();
+            return bookAuthor;
         }
         public async Task<BookAuthor> UpdateBookAuthorAsync(int id, BookAuthor editedBookAuthor)
         {

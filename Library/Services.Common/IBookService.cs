@@ -6,7 +6,7 @@ namespace Library.Services.Common
     {
         Task<IList<Book>> GetBooksAsync();
         Task<Book> GetBookAsync(int id);
-        Task <int> CreateBookAsync(Book book);
+        Task <Book> CreateBookAsync(Book book);
         Task <Book>UpdateBookAsync(int id,Book editedBook);
         Task <int> DeleteBookAsync(int id); 
     }

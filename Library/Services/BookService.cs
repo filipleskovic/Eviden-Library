@@ -11,7 +11,7 @@ namespace Library.Services
         {
             _repository = repository; 
         }
-        public async Task<int> CreateBookAsync(Book book)
+        public async Task<Book> CreateBookAsync(Book book)
         {
            return await _repository.CreateBookAsync(book);
             

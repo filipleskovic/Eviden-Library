@@ -20,7 +20,7 @@ namespace Library.Services
         {
             return await _repository.GetGenreAsync(Id);
         }
-        public async Task<int> CreateGenreAsync(Genre genre)
+        public async Task<Genre> CreateGenreAsync(Genre genre)
         {
             return await _repository.CreateGenreAsync(genre);
         }

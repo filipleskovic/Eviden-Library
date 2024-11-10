@@ -8,7 +8,7 @@ namespace Library.Repository.Common
         Task<Genre> GetGenreAsync(int Id);
         Task<Genre> UpdateGenreAsync(int Id, Genre genre);
 
-        Task<int> CreateGenreAsync(Genre genre);
+        Task<Genre> CreateGenreAsync(Genre genre);
         Task<int> DeleteGenreAsync(int Id);
     }
 }

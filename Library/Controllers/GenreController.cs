@@ -50,8 +50,8 @@ namespace Library.Controllers
             Genre genre = genrePostModel.ToGenre();
             try
             {
-                int commits = await _service.CreateGenreAsync(genre);
-                return Ok("Book created successfully");
+                Genre addedGenre = await _service.CreateGenreAsync(genre);
+                return Ok(addedGenre);
 
             }
             catch (DbUpdateException ex)
@@ -60,12 +60,12 @@ namespace Library.Controllers
             }
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateGenreAsync([FromBody] Genre genre, [FromRoute] int Id)
+        public async Task<IActionResult> UpdateGenreAsync([FromBody] GenrePutModel genrePutModel, [FromRoute] int Id)
         {
-            if (Id != genre.Id)
-                return BadRequest("Id can't be changed");
+            
             try
             {
+                Genre genre = genrePutModel.ToGenre();
                 Genre edited = await _service.UpdateGenreAsync(Id, genre);
                 return Ok(edited);
 

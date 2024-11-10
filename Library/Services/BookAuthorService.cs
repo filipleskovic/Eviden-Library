@@ -1,6 +1,7 @@
 ﻿using Library.IBookAuthorRepoistory.cs;
 using Library.Models;
 using Library.Services.Common;
+using Library.Validators;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace Library.Services
@@ -20,13 +21,21 @@ namespace Library.Services
         {
             return await _repository.GetBookAuthorAsync(Id);
         }
-        public async Task<int> CreateBookAuthorAsync(BookAuthor bookAuthor)
+        public async Task<BookAuthor> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
-            return await _repository.CreateBookAuthorAsync(bookAuthor);
+            if (BookAuthorValidator.IsValid(bookAuthor))
+            {
+                return await _repository.CreateBookAuthorAsync(bookAuthor);
+            }
+            throw new Exception("Year is bigger than 2024.");
         }
-        public async Task<BookAuthor> UpdateBookAuthorAsync(int Id,BookAuthor bookAuthor)
+        public async Task<BookAuthor> UpdateBookAuthorAsync(int id,BookAuthor bookAuthor)
         {
-            return await _repository.UpdateBookAuthorAsync(Id,bookAuthor);
+            if (BookAuthorValidator.IsValid(bookAuthor))
+            {
+                return await _repository.UpdateBookAuthorAsync(id,bookAuthor);
+            }
+            throw new Exception("Year is bigger than 2024.");
         }
         public async Task<int> DeleteBookAuthorAsync(int Id)
         {
