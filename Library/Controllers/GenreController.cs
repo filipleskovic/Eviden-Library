@@ -35,6 +35,10 @@ namespace Library.Controllers
             try
             {
                 Genre genre = await _service.GetGenreAsync(id);
+                if (genre == null)
+                {
+                    return NotFound($"Genre with id: {id} not found");
+                }
                 return Ok(genre);
             }
             catch (DbUpdateException ex)
@@ -59,14 +63,18 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateGenreAsync([FromBody] GenrePutModel genrePutModel, [FromRoute] int Id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateGenreAsync([FromBody] GenrePutModel genrePutModel, [FromRoute] int id)
         {
             
             try
             {
                 Genre genre = genrePutModel.ToGenre();
-                Genre edited = await _service.UpdateGenreAsync(Id, genre);
+                Genre edited = await _service.UpdateGenreAsync(id, genre);
+                if (edited == null)
+                {
+                    return NotFound($"Genre with id: {id} not found");
+                }
                 return Ok(edited);
 
             }
@@ -75,12 +83,16 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteGenreAuthorAsync([FromRoute] int Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGenreAuthorAsync([FromRoute] int id)
         {
             try
             {
-                int commits = await _service.DeleteGenreAsync(Id);
+                int commits = await _service.DeleteGenreAsync(id);
+                if (commits == -1)
+                {
+                    return NotFound($"Genre with id: {id} not found");
+                }
                 return Ok("Book deleted successfully");
 
 

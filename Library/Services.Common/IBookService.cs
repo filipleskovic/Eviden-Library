@@ -1,4 +1,5 @@
 ﻿using Library.Models;
+using Library.Validators;
 
 namespace Library.Services.Common
 {
@@ -6,8 +7,8 @@ namespace Library.Services.Common
     {
         Task<IList<Book>> GetBooksAsync();
         Task<Book> GetBookAsync(int id);
-        Task <Book> CreateBookAsync(Book book);
-        Task <Book>UpdateBookAsync(int id,Book editedBook);
+        Task <BookValidator> CreateBookAsync(Book book);
+        Task <BookValidator> UpdateBookAsync(int id,Book editedBook);
         Task <int> DeleteBookAsync(int id); 
     }
 }

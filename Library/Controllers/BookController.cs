@@ -2,6 +2,8 @@
 using Library.DTO.BookAuthor;
 using Library.Models;
 using Library.Services.Common;
+using Library.Validators;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +38,10 @@ namespace Library.Controllers
             try
             {
                 Book book = await _service.GetBookAsync(id);
+                if(book==null)
+                {
+                    return NotFound($"Book with Id : {id} not found");
+                }
                 return Ok(book);
             }
             catch (DbUpdateException ex)
@@ -51,8 +57,13 @@ namespace Library.Controllers
             Book book = bookPostModel.ToBook();
             try
             {
-                Book addedBook= await _service.CreateBookAsync(book);
-                return Ok(addedBook);
+                BookValidator bookValidator= await _service.CreateBookAsync(book);
+                if(bookValidator.Book == null)
+                {
+                    return NotFound(bookValidator.Message);
+                }
+                return Ok(bookValidator.Book);
+                
 
             }
             catch (DbUpdateException ex)
@@ -63,13 +74,15 @@ namespace Library.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditBookAsync([FromBody] BookPutModel bookPutModel, [FromRoute] int id)
         {
-            
-            
             try
             {
                 Book book = bookPutModel.ToBook();
-                book = await _service.UpdateBookAsync(id, book);
-                return Ok(book);
+                BookValidator bookValidator = await _service.UpdateBookAsync(id, book);
+                if(bookValidator.Book==null)
+                {
+                    return NotFound(bookValidator.Message);
+                }
+                return Ok(bookValidator.Book);
             }
             catch (DbUpdateException ex)
             {
@@ -81,7 +94,11 @@ namespace Library.Controllers
         {
             try
             {
-                 await _service.DeleteBookAsync(id);
+                int commits =await _service.DeleteBookAsync(id);
+                if (commits == -1)
+                {
+                    return NotFound($"Book with Id : {id} not found");
+                }
                 return Ok("Book deleted successfully");
             }
             catch (DbUpdateException ex)

@@ -24,9 +24,9 @@ namespace Library.Services
         {
             return await _repository.CreateGenreAsync(genre);
         }
-        public async Task<Genre> UpdateGenreAsync(int Id, Genre genre)
+        public async Task<Genre> UpdateGenreAsync(int Id, Genre editedGenre)
         {
-            return await _repository.UpdateGenreAsync(Id, genre);
+            return await _repository.UpdateGenreAsync(Id, editedGenre);
         }
         public async Task<int> DeleteGenreAsync(int Id)
         {

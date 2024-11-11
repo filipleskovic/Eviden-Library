@@ -15,26 +15,20 @@ namespace Library.Repository
         }
         public async Task<IList<BookAuthor>> GetBookAuthorsAsync()
         {
-            if (_dbContext == null)
-            {
-                return  null;
-            }
             return await _dbContext.BookAuthors.ToListAsync();
         }
-        public async Task<BookAuthor> GetBookAuthorAsync(int Id)
+        public async Task<BookAuthor> GetBookAuthorAsync(int id)
         {
-            if (_dbContext == null)
+           BookAuthor bookAuthor = await _dbContext.BookAuthors.FindAsync(id);
+            if (bookAuthor == null)
             {
                 return null;
             }
-            return await _dbContext.BookAuthors.FindAsync(Id);
+            return bookAuthor;
         }
         public async Task<BookAuthor> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
-            if(_dbContext == null)
-            {
-                return null;
-            }
+            
             _dbContext.BookAuthors.Add(bookAuthor);
             await _dbContext.SaveChangesAsync();
             bookAuthor = _dbContext.BookAuthors.OrderByDescending(bAuthor => bAuthor.Id).FirstOrDefault();
@@ -42,11 +36,12 @@ namespace Library.Repository
         }
         public async Task<BookAuthor> UpdateBookAuthorAsync(int id, BookAuthor editedBookAuthor)
         {
-            if (_dbContext == null)
+            
+            BookAuthor bookAuthor = await GetBookAuthorAsync(id);
+            if (bookAuthor == null)
             {
                 return null;
             }
-            BookAuthor bookAuthor = await GetBookAuthorAsync(id);
             if (editedBookAuthor.YearOfBirth != 0)
             {
                 bookAuthor.YearOfBirth = editedBookAuthor.YearOfBirth;
@@ -59,13 +54,10 @@ namespace Library.Repository
             await _dbContext.SaveChangesAsync();
             return bookAuthor;
         }
-        public async Task<int> DeleteBookAuthorAsync(int Id)
+        public async Task<int> DeleteBookAuthorAsync(int id)
         {
-            if (_dbContext == null)
-            {
-                return 0;
-            }
-            BookAuthor bookAuthor =await _dbContext.BookAuthors.FindAsync(Id);
+
+            BookAuthor bookAuthor = await GetBookAuthorAsync(id);
             if(bookAuthor == null)
             {
                 return -1;

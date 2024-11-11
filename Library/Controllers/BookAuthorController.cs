@@ -34,6 +34,10 @@ namespace Library.Controllers
             try
             {
                 BookAuthor bookAuthor = await _service.GetBookAuthorAsync(id);
+                if (bookAuthor == null)
+                {
+                    return NotFound($"Book author with Id: {id} not found ");
+                }
                 return Ok(bookAuthor);
             }
             catch (DbUpdateException ex)
@@ -44,12 +48,16 @@ namespace Library.Controllers
 
 
         [HttpPost()]
-        public async Task<IActionResult> CreateBookAuthorAsync(BookAuthorPostModel bookAuthorPostModel)
+        public async Task<IActionResult> CreateBookAuthorAsync([FromBody] BookAuthorPostModel bookAuthorPostModel)
         {
             BookAuthor bookAuthor = bookAuthorPostModel.ToBookAuthor();
             try
             {
                 BookAuthor addedBookAuthor = await _service.CreateBookAuthorAsync(bookAuthor);
+                if(addedBookAuthor == null)
+                {
+                    BadRequest("Year can 't be bigger than 2024.");
+                }
                 return Ok(addedBookAuthor);
 
             }
@@ -57,14 +65,19 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateBookAuthorAsync([FromBody] BookAuthorPutModel bookAuthorPutModel, [FromRoute] int Id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBookAuthorAsync([FromBody] BookAuthorPutModel bookAuthorPutModel, [FromRoute] int id)
         {
  
             try
             {
+
                 BookAuthor bookAuthor = bookAuthorPutModel.ToBookAuthor();
-                BookAuthor edited = await _service.UpdateBookAuthorAsync(Id, bookAuthor);
+                BookAuthor edited = await _service.UpdateBookAuthorAsync(id, bookAuthor);
+                if(edited == null)
+                {
+                    return NotFound($"Book author with Id: {id} not found or year can 't be bigger than 2024. ");
+                }
                 return Ok(edited);
 
             }
@@ -74,11 +87,16 @@ namespace Library.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteBookAuthorAsync([FromRoute] int Id)
+        public async Task<IActionResult> DeleteBookAuthorAsync([FromRoute] int id)
         {
             try
             {
-                int commits =await _service.DeleteBookAuthorAsync(Id);
+
+                int commits =await _service.DeleteBookAuthorAsync(id);
+                if (commits == -1)
+                {
+                    return NotFound($"Book author with Id: {id} not found");
+                }
                 return Ok("BookAuthor deleted successfully");
 
           

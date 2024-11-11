@@ -27,15 +27,15 @@ namespace Library.Services
             {
                 return await _repository.CreateBookAuthorAsync(bookAuthor);
             }
-            throw new Exception("Year is bigger than 2024.");
+            return null;
         }
-        public async Task<BookAuthor> UpdateBookAuthorAsync(int id,BookAuthor bookAuthor)
+        public async Task<BookAuthor> UpdateBookAuthorAsync(int id,BookAuthor editedBookAuthor)
         {
-            if (BookAuthorValidator.IsValid(bookAuthor))
+            if (BookAuthorValidator.IsValid(editedBookAuthor))
             {
-                return await _repository.UpdateBookAuthorAsync(id,bookAuthor);
+                return await _repository.UpdateBookAuthorAsync(id, editedBookAuthor);
             }
-            throw new Exception("Year is bigger than 2024.");
+            return null;
         }
         public async Task<int> DeleteBookAuthorAsync(int Id)
         {
