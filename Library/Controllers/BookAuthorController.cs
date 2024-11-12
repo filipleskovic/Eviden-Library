@@ -1,6 +1,7 @@
 ﻿using Library.DTO.BookAuthor;
 using Library.Models;
 using Library.Services.Common;
+using Library.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace Library.Controllers
@@ -53,12 +54,12 @@ namespace Library.Controllers
             BookAuthor bookAuthor = bookAuthorPostModel.ToBookAuthor();
             try
             {
-                BookAuthor addedBookAuthor = await _service.CreateBookAuthorAsync(bookAuthor);
-                if(addedBookAuthor == null)
+               BookAuthorValidator bookAuthorValidator = await _service.CreateBookAuthorAsync(bookAuthor);
+                if(bookAuthorValidator.BookAuthor == null)
                 {
-                    BadRequest("Year can 't be bigger than 2024.");
+                    BadRequest(bookAuthorValidator.Message);
                 }
-                return Ok(addedBookAuthor);
+                return Ok(bookAuthorValidator.BookAuthor);
 
             }
             catch (DbUpdateException ex) {
@@ -73,12 +74,12 @@ namespace Library.Controllers
             {
 
                 BookAuthor bookAuthor = bookAuthorPutModel.ToBookAuthor();
-                BookAuthor edited = await _service.UpdateBookAuthorAsync(id, bookAuthor);
-                if(edited == null)
+                BookAuthorValidator bookAuthorValidator= await _service.UpdateBookAuthorAsync(id, bookAuthor);
+                if(bookAuthorValidator.BookAuthor == null)
                 {
-                    return NotFound($"Book author with Id: {id} not found or year can 't be bigger than 2024. ");
+                    return BadRequest(bookAuthorValidator.Message);
                 }
-                return Ok(edited);
+                return Ok(bookAuthorValidator.BookAuthor);
 
             }
             catch (DbUpdateException ex)
@@ -86,7 +87,7 @@ namespace Library.Controllers
                 return BadRequest(ex.InnerException?.Message);
             }
         }
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBookAuthorAsync([FromRoute] int id)
         {
             try

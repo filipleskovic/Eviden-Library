@@ -17,6 +17,12 @@ namespace Library.Validators
         }
         public async Task<bool> IsValidAsync (Book book ,IGenreRepository genreRepository, IBookAuthorRepository bookAuthorRepoistory)
         {
+            if (String.IsNullOrEmpty(book.BookName) && IsPost)
+            {
+                book = null;
+                Message = "$Invalid name";
+                return false;   
+            }
             if( await bookAuthorRepoistory.GetBookAuthorAsync(book.BookAuthorId) == null && (IsPost || book.BookAuthorId != 0))
             {
                 Message = $"No book author found on Id: {book.BookAuthorId}";

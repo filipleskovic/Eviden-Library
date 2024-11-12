@@ -21,21 +21,31 @@ namespace Library.Services
         {
             return await _repository.GetBookAuthorAsync(Id);
         }
-        public async Task<BookAuthor> CreateBookAuthorAsync(BookAuthor bookAuthor)
+        public async Task<BookAuthorValidator> CreateBookAuthorAsync(BookAuthor bookAuthor)
         {
-            if (BookAuthorValidator.IsValid(bookAuthor))
+            BookAuthorValidator bookAuthorValidator = new BookAuthorValidator(true);
+            if (bookAuthorValidator.IsValid(bookAuthor))
             {
-                return await _repository.CreateBookAuthorAsync(bookAuthor);
+                BookAuthor addedBookAuthor =await _repository.CreateBookAuthorAsync(bookAuthor);
+                bookAuthorValidator.BookAuthor = bookAuthor;
             }
-            return null;
+            return bookAuthorValidator;
         }
-        public async Task<BookAuthor> UpdateBookAuthorAsync(int id,BookAuthor editedBookAuthor)
+        public async Task<BookAuthorValidator> UpdateBookAuthorAsync(int id,BookAuthor editedBookAuthor)
         {
-            if (BookAuthorValidator.IsValid(editedBookAuthor))
+            BookAuthorValidator bookAuthorValidator = new BookAuthorValidator(false);
+            if( await GetBookAuthorAsync(id) == null)
             {
-                return await _repository.UpdateBookAuthorAsync(id, editedBookAuthor);
+                bookAuthorValidator.BookAuthor = null;
+                bookAuthorValidator.Message = $"Author with Id : {id} not found ";
+                return bookAuthorValidator;
             }
-            return null;
+            if (bookAuthorValidator.IsValid(editedBookAuthor))
+            {
+                BookAuthor bookAuthor = await _repository.UpdateBookAuthorAsync(id, editedBookAuthor);
+                bookAuthorValidator.BookAuthor = bookAuthor;
+            }
+            return bookAuthorValidator;
         }
         public async Task<int> DeleteBookAuthorAsync(int Id)
         {
